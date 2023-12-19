@@ -2,6 +2,22 @@ import urllib.request
 import xml.etree.ElementTree as ET
 import configparser
 import argparse
+import os
+
+
+def create_config_if_not_exists():
+    """
+    Creates a config.ini file with default settings if it does not exist.
+
+    :return: None
+    """
+    config_file = 'config.ini'
+    if not os.path.exists(config_file):
+        config = configparser.ConfigParser()
+        config['SCHOOL_NAMES'] = {'names': ''}
+        with open(config_file, 'w') as configfile:
+            config.write(configfile)
+        print(f"'{config_file}' created with default settings.")
 
 
 def read_config(section, key):
@@ -117,6 +133,7 @@ def main():
         To show all schools from the feed:
         main --all
     """
+    create_config_if_not_exists()
     parser = argparse.ArgumentParser(description='Manage school names in config and fetch status.')
     parser.add_argument('--add', help='Add a school name to config')
     parser.add_argument('--remove', help='Remove a school name from config')
